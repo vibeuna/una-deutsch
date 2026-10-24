@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unas Deutsch-Lernwelt</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @keyframes bounce-short {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-4deg); }
+      75% { transform: rotate(4deg); }
+    }
+    @keyframes shake-wrong {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+    .anim-bounce { animation: bounce-short 0.45s ease-in-out; }
+    .anim-wiggle { animation: wiggle 0.4s ease-in-out; }
+    .anim-shake { animation: shake-wrong 0.35s ease-in-out; }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-amber-50/60 via-sky-50/40 to-emerald-50/50 min-h-screen text-slate-800 font-sans antialiased selection:bg-amber-200 p-3 sm:p-6">
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+  <div class="max-w-4xl mx-auto space-y-5">
+
+    <!-- Top Persistent Navigation Bar -->
+    <nav class="bg-white/90 backdrop-blur border border-slate-200 rounded-2xl p-2.5 sm:p-3 shadow-xs flex items-center justify-between">
+      <button onclick="showSection('home')" class="flex items-center gap-2 hover:opacity-80 transition group">
+        <span class="text-2xl group-hover:scale-110 transition">🌟</span>
+        <span class="font-black text-slate-900 text-sm sm:text-base tracking-tight">Unas Lernwelt</span>
+      </button>
+
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <button onclick="showSection('home')" id="nav-btn-home" class="px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm bg-amber-500 text-white shadow-xs">
+          🏠 Start
+        </button>
+        <button onclick="showSection('verben')" id="nav-btn-verben" class="px-2.5 sm:px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 text-slate-700">
+          ⏰ Verben
+        </button>
+        <button onclick="showSection('habensein')" id="nav-btn-habensein" class="px-2.5 sm:px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 text-slate-700">
+          🏃 Haben/Sein
+        </button>
+        <button onclick="showSection('kicker')" id="nav-btn-kicker" class="px-2.5 sm:px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 text-slate-700">
+          ⚽ Satzbau
+        </button>
+        <button onclick="toggleAudio()" class="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl text-xs font-bold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 ml-1" title="Audio ein/aus">
+          <span id="audio-icon">🔊</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ================= 1. HOMEPAGE: WILLKOMMEN, UNA ================= -->
+    <section id="sec-home" class="space-y-6">
+      
+      <!-- Welcome Hero Banner -->
+      <div class="bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400 rounded-3xl p-6 sm:p-8 text-white shadow-md text-center relative overflow-hidden">
+        <div class="relative z-10 space-y-2">
+          <div class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur text-white text-xs font-black px-3.5 py-1 rounded-full border border-white/30">
+            <span>🎒 2. Klasse Deutsch</span>
+            <span>•</span>
+            <span>Spiel & Spaß</span>
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-black tracking-tight drop-shadow-xs">
+            Willkommen, Una! 🚀
+          </h1>
+          <p class="text-amber-100 text-sm sm:text-base font-medium max-w-lg mx-auto">
+            Was möchtest du heute üben? Klicke auf ein Abenteuer und sammle goldene Sterne!
+          </p>
+        </div>
+      </div>
+
+      <!-- Activity Cards Menu -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        <!-- Card 1: 100 Verben (Heute & Gestern) -->
+        <button onclick="showSection('verben')" class="group bg-white hover:bg-amber-50/50 border-2 border-amber-200 hover:border-amber-400 rounded-3xl p-5 sm:p-6 text-left shadow-xs transition hover:shadow-md transform hover:-translate-y-0.5 active:scale-[0.99] flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-4xl group-hover:scale-110 transition">⏰</span>
+              <span class="bg-amber-100 text-amber-900 text-xs font-black px-3 py-1 rounded-full border border-amber-200">100 Verben</span>
+            </div>
+            <h2 class="text-xl font-black text-slate-900 group-hover:text-amber-800 transition">
+              Heute & Gestern
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+              Wie heißt das Verb in der Vergangenheit? Klicke auf die richtige Form für gestern!
+            </p>
+            <div class="mt-3 bg-amber-50 p-2.5 rounded-xl border border-amber-100 text-xs font-semibold text-amber-900">
+              <em>„Heute esse ich ein Eis.“</em> ➔ <em>„Gestern habe ich ein Eis <strong>gegessen</strong>.“</em>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center justify-between text-xs font-extrabold text-amber-700">
+            <span>Verben üben</span>
+            <span class="text-base group-hover:translate-x-1 transition">➔</span>
+          </div>
+        </button>
+
+        <!-- Card 2: Haben oder Sein -->
+        <button onclick="showSection('habensein')" class="group bg-white hover:bg-sky-50/50 border-2 border-sky-200 hover:border-sky-400 rounded-3xl p-5 sm:p-6 text-left shadow-xs transition hover:shadow-md transform hover:-translate-y-0.5 active:scale-[0.99] flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-4xl group-hover:scale-110 transition">🏃‍♀️</span>
+              <span class="bg-sky-100 text-sky-900 text-xs font-black px-3 py-1 rounded-full border border-sky-200">Bewegungs-Kompass</span>
+            </div>
+            <h2 class="text-xl font-black text-slate-900 group-hover:text-sky-800 transition">
+              Haben oder Sein?
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+              Heißt es <strong>„Ich bin gelaufen“</strong> oder <strong>„Ich habe gelaufen“</strong>? Sortiere auf die passende Insel!
+            </p>
+            <div class="mt-3 bg-sky-50 p-2.5 rounded-xl border border-sky-100 text-xs font-semibold text-sky-900">
+              🚀 <strong>SEIN:</strong> von A nach B <em>(schwimmen, rennen, fahren)</em><br>
+              🛋️ <strong>HABEN:</strong> am selben Ort <em>(malen, basteln, essen)</em>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center justify-between text-xs font-extrabold text-sky-700">
+            <span>Inseln entdecken</span>
+            <span class="text-base group-hover:translate-x-1 transition">➔</span>
+          </div>
+        </button>
+
+        <!-- Card 3: Der Satzbau-Kicker -->
+        <button onclick="showSection('kicker')" class="group bg-white hover:bg-emerald-50/50 border-2 border-emerald-200 hover:border-emerald-400 rounded-3xl p-5 sm:p-6 text-left shadow-xs transition hover:shadow-md transform hover:-translate-y-0.5 active:scale-[0.99] flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-4xl group-hover:scale-110 transition">⚽</span>
+              <span class="bg-emerald-100 text-emerald-900 text-xs font-black px-3 py-1 rounded-full border border-emerald-200">Satzbau</span>
+            </div>
+            <h2 class="text-xl font-black text-slate-900 group-hover:text-emerald-800 transition">
+              Der Verben-Kicker
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+              Die Wörter <strong>weil, dass, wenn, bis, ob</strong> kicken das Verb immer ganz ans <strong>Ende</strong> des Satzes!
+            </p>
+            <div class="mt-3 bg-emerald-50 p-2.5 rounded-xl border border-emerald-100 text-xs font-semibold text-emerald-900">
+              <em>„Ich gehe ins Bett, <strong>weil</strong> ich müde <strong>bin</strong>.“</em> 🥅
+            </div>
+          </div>
+          <div class="mt-4 flex items-center justify-between text-xs font-extrabold text-emerald-700">
+            <span>Tore schießen</span>
+            <span class="text-base group-hover:translate-x-1 transition">➔</span>
+          </div>
+        </button>
+
+        <!-- Card 4: 100 Verben Nachschlagen & Hören -->
+        <button onclick="showSection('lexikon')" class="group bg-white hover:bg-purple-50/50 border-2 border-purple-200 hover:border-purple-400 rounded-3xl p-5 sm:p-6 text-left shadow-xs transition hover:shadow-md transform hover:-translate-y-0.5 active:scale-[0.99] flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-4xl group-hover:scale-110 transition">📖</span>
+              <span class="bg-purple-100 text-purple-900 text-xs font-black px-3 py-1 rounded-full border border-purple-200">Wörterbuch</span>
+            </div>
+            <h2 class="text-xl font-black text-slate-900 group-hover:text-purple-800 transition">
+              100 Verben Nachschlagen
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+              Suche nach beliebigen Verben, lies die Beispielsätze und höre dir die richtige deutsche Aussprache an!
+            </p>
+            <div class="mt-3 bg-purple-50 p-2.5 rounded-xl border border-purple-100 text-xs font-semibold text-purple-900">
+              🔍 Durchsuchen • 🔊 Vorlesen • ⚡ Zauberverben
+            </div>
+          </div>
+          <div class="mt-4 flex items-center justify-between text-xs font-extrabold text-purple-700">
+            <span>Alle 100 Verben ansehen</span>
+            <span class="text-base group-hover:translate-x-1 transition">➔</span>
+          </div>
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- ================= 2. ACTIVITY: 100 VERBEN (HEUTE & GESTERN) ================= -->
+    <section id="sec-verben" class="hidden space-y-4">
+      
+      <!-- Top Sub-Bar -->
+      <div class="bg-white rounded-2xl p-3 border border-slate-200 flex flex-wrap items-center justify-between gap-3 shadow-xs">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-1.5 bg-amber-50 border border-amber-200 px-3 py-1 rounded-xl font-bold text-amber-800 text-sm">
+            <span>⭐</span>
+            <span id="star-count">0</span>
+            <span class="text-xs text-amber-700">Sterne</span>
+          </div>
+          <div class="flex items-center gap-1 bg-orange-50 border border-orange-200 px-2.5 py-1 rounded-xl font-bold text-orange-800 text-xs">
+            <span>🔥</span>
+            <span id="streak-count">0</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <select id="cat-select" onchange="filterVerbsCategory(this.value)" class="bg-slate-50 border border-slate-300 text-slate-800 text-xs font-bold rounded-xl px-2.5 py-1.5 focus:outline-none">
+            <option value="all">🌟 Alle 100 Verben</option>
+            <option value="essen">🍎 Essen & Trinken (10)</option>
+            <option value="schule">✏️ Schule & Malen (18)</option>
+            <option value="sport">🏃‍♀️ Sport & Bewegung (24)</option>
+            <option value="alltag">🏠 Zuhause & Alltag (29)</option>
+            <option value="gefuehle">💬 Gefühle & Sinne (19)</option>
+            <option value="irregular">⚡ Nur Zauberverben</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Main Game Card -->
+      <div class="bg-white rounded-3xl p-5 sm:p-7 shadow-sm border-2 border-amber-200 space-y-4">
+        
+        <div class="flex items-center justify-between">
+          <span id="verb-badge" class="bg-amber-100 text-amber-900 text-xs font-bold px-3 py-0.5 rounded-full border border-amber-200">
+            Kategorie
+          </span>
+          <span id="progress-indicator" class="text-xs text-slate-500 font-semibold">
+            Verb 1 von 100
+          </span>
+        </div>
+
+        <!-- TODAY Section -->
+        <div class="bg-blue-50/80 border border-blue-200 rounded-2xl p-4">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[11px] font-black uppercase tracking-wider text-blue-700">☀️ HEUTE (Gegenwart)</span>
+            <button onclick="speakGerman(currentVerb.today)" class="text-blue-700 hover:text-blue-900 bg-white border border-blue-200 px-2.5 py-0.5 rounded-lg text-xs font-bold shadow-xs">
+              <span>🔊</span> Hören
+            </button>
+          </div>
+          <p id="sentence-today" class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5"></p>
+          <p class="text-xs text-blue-600 font-semibold mt-0.5">
+            Grundform: <strong id="infinitive-label" class="underline"></strong>
+          </p>
+        </div>
+
+        <!-- YESTERDAY Section -->
+        <div class="bg-purple-50/80 border-2 border-purple-200 rounded-2xl p-4">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[11px] font-black uppercase tracking-wider text-purple-700">🌙 GESTERN (Vergangenheit)</span>
+            <button onclick="speakGerman(currentVerb.full)" class="text-purple-700 hover:text-purple-900 bg-white border border-purple-200 px-2.5 py-0.5 rounded-lg text-xs font-bold shadow-xs">
+              <span>🔊</span> Hören
+            </button>
+          </div>
+          
+          <div id="sentence-yesterday" class="text-xl sm:text-2xl font-black text-slate-900 mt-1 leading-relaxed">
+            <!-- Injected by JS -->
+          </div>
+          <div class="mt-1 text-xs text-purple-700 font-bold">
+            👉 Klicke unten auf das richtige Wort:
+          </div>
+        </div>
+
+        <!-- Feedback Box directly placed in view -->
+        <div id="verb-feedback" class="hidden rounded-2xl p-4 transition-all">
+          <div class="flex items-start gap-2.5">
+            <span id="verb-fb-icon" class="text-2xl">🎉</span>
+            <div class="flex-1">
+              <h4 id="verb-fb-title" class="font-black text-base"></h4>
+              <p id="verb-fb-desc" class="text-xs sm:text-sm font-semibold mt-0.5"></p>
+              <div id="verb-tip-rule" class="mt-1.5 text-xs bg-white/80 rounded-lg p-2 font-mono"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Options Grid -->
+        <div id="verb-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Dynamic Buttons -->
+        </div>
+
+        <!-- Footer Controls -->
+        <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+          <button onclick="showVerbHint()" class="text-slate-500 hover:text-amber-700 text-xs font-bold flex items-center gap-1 px-3 py-1 rounded-xl">
+            <span>💡</span> Tipp
+          </button>
+          
+          <button onclick="nextVerb()" class="bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs sm:text-sm px-5 py-2 rounded-xl shadow-md shadow-amber-200 transition flex items-center gap-1.5">
+            <span>Nächstes Verb</span>
+            <span>➔</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 3. ACTIVITY: HABEN ODER SEIN ================= -->
+    <section id="sec-habensein" class="hidden space-y-4">
+      
+      <!-- Visual Rule Cards (SEIN vs HABEN) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="bg-sky-50 border-2 border-sky-300 rounded-2xl p-3.5 shadow-xs">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-black text-sky-900 text-sm flex items-center gap-1.5">
+              <span>🚀</span> <span>Insel SEIN („Ich bin...“)</span>
+            </span>
+            <span class="text-[10px] bg-sky-200 text-sky-800 font-extrabold px-2 py-0.5 rounded-full">bin / ist</span>
+          </div>
+          <p class="text-xs text-sky-800 font-medium leading-relaxed">
+            Für <strong>Bewegung von A nach B</strong>: <em>schwimmen, laufen, gehen, fahren, klettern, spazieren</em>.
+          </p>
+        </div>
+
+        <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-3.5 shadow-xs">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-black text-amber-900 text-sm flex items-center gap-1.5">
+              <span>🛋️</span> <span>Insel HABEN („Ich habe...“)</span>
+            </span>
+            <span class="text-[10px] bg-amber-200 text-amber-800 font-extrabold px-2 py-0.5 rounded-full">habe / hat</span>
+          </div>
+          <p class="text-xs text-amber-800 font-medium leading-relaxed">
+            Für Aktivitäten <strong>am selben Ort</strong>: <em>essen, malen, spielen, lesen, basteln, schlafen</em>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Sorting Game Arena -->
+      <div class="bg-white rounded-3xl p-5 sm:p-7 border-2 border-purple-200 shadow-sm space-y-4">
+        
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-0.5 rounded-lg">
+              ⭐ <span id="sort-stars">0</span> Sterne
+            </span>
+          </div>
+          <span id="sort-progress" class="text-xs font-medium text-slate-400">Wort 1 von 26</span>
+        </div>
+
+        <!-- The Word Card to Sort -->
+        <div id="sort-card" class="bg-gradient-to-b from-purple-50/50 to-white border-2 border-purple-200 rounded-2xl p-5 text-center max-w-sm mx-auto shadow-xs">
+          <div id="sort-emoji" class="text-5xl mb-2">🏊‍♀️</div>
+          <h3 id="sort-verb" class="text-2xl font-black text-slate-900">schwimmen</h3>
+          <p id="sort-sentence" class="text-xs text-slate-500 font-medium mt-1">Heute schwimme ich im See.</p>
+          <div class="mt-3 inline-block bg-purple-100 text-purple-800 text-[11px] font-bold px-3 py-0.5 rounded-full">
+            Wie heißt es für gestern?
+          </div>
+        </div>
+
+        <!-- Feedback Box -->
+        <div id="sort-fb" class="hidden rounded-2xl p-3.5 max-w-md mx-auto transition-all">
+          <div class="flex items-start gap-2.5">
+            <span id="sort-fb-icon" class="text-2xl">🎉</span>
+            <div>
+              <h4 id="sort-fb-title" class="font-black text-sm"></h4>
+              <p id="sort-fb-desc" class="text-xs font-bold text-slate-800 mt-0.5"></p>
+              <p id="sort-fb-hint" class="text-[11px] text-slate-600 mt-0.5"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- The 2 Big Action Buttons -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto pt-2">
+          <button onclick="answerSort('sein')" class="group bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white p-4 rounded-2xl shadow-md shadow-sky-200 text-left flex items-center justify-between transition active:scale-95">
+            <div class="flex items-center gap-3">
+              <span class="text-3xl">🚀</span>
+              <div>
+                <span class="text-[10px] uppercase font-bold text-sky-200 block">Bewegung (A nach B)</span>
+                <span class="text-lg font-black">Ich bin ...</span>
+              </div>
+            </div>
+            <span class="text-xl opacity-70 group-hover:translate-x-1 transition">➔</span>
+          </button>
+
+          <button onclick="answerSort('haben')" class="group bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white p-4 rounded-2xl shadow-md shadow-amber-200 text-left flex items-center justify-between transition active:scale-95">
+            <div class="flex items-center gap-3">
+              <span class="text-3xl">🛋️</span>
+              <div>
+                <span class="text-[10px] uppercase font-bold text-amber-200 block">Am selben Ort</span>
+                <span class="text-lg font-black">Ich habe ...</span>
+              </div>
+            </div>
+            <span class="text-xl opacity-70 group-hover:translate-x-1 transition">➔</span>
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ================= 4. ACTIVITY: DER SATZBAU-KICKER ================= -->
+    <section id="sec-kicker" class="hidden space-y-4">
+      
+      <!-- Visual Rule Box -->
+      <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-300 rounded-2xl p-3 sm:p-4 text-xs font-semibold text-slate-800 shadow-inner flex flex-wrap items-center justify-between gap-2">
+        <span class="bg-white px-2.5 py-1 rounded-lg border border-emerald-200 shadow-xs">„Ich gehe ins Bett,</span>
+        <span class="bg-emerald-600 text-white px-2 py-0.5 rounded-md font-black">👟 weil</span>
+        <span class="text-slate-700">ich müde</span>
+        <span class="bg-amber-400 text-amber-950 px-2 py-0.5 rounded-md font-black border border-amber-300">🥅 bin.“</span>
+      </div>
+
+      <!-- Kicker Game Card -->
+      <div class="bg-white rounded-3xl p-5 sm:p-7 border-2 border-emerald-300 shadow-sm space-y-3.5">
+        
+        <div class="flex items-center justify-between text-xs">
+          <span id="kicker-badge" class="bg-emerald-100 text-emerald-900 font-black px-2.5 py-0.5 rounded-full border border-emerald-200">
+            Kicker: weil
+          </span>
+          <span id="kicker-progress" class="text-slate-400 font-medium">Frage 1 von 30</span>
+        </div>
+
+        <!-- Main Sentence Prompt -->
+        <div class="bg-emerald-50/80 border-2 border-emerald-200 rounded-2xl p-4 text-center">
+          <div class="text-[10px] uppercase font-black text-emerald-700 tracking-wider mb-0.5">Satz-Anfang:</div>
+          <div id="kicker-prompt" class="text-xl sm:text-2xl font-black text-slate-900">
+            „Ich gehe ins Bett, ...“
+          </div>
+          <div class="mt-1 text-xs font-bold text-emerald-800">
+            👇 Wo steht das Verb? Klicke auf die richtige Fortsetzung:
+          </div>
+        </div>
+
+        <!-- Feedback Box placed directly in view (no scrolling!) -->
+        <div id="kicker-fb" class="hidden rounded-xl p-3.5 transition-all">
+          <div class="flex items-start gap-2.5">
+            <span id="kicker-fb-icon" class="text-2xl">🎉</span>
+            <div class="flex-1">
+              <h4 id="kicker-fb-title" class="font-black text-sm sm:text-base"></h4>
+              <p id="kicker-fb-sentence" class="text-xs sm:text-sm font-bold text-slate-900 mt-0.5"></p>
+              <p id="kicker-fb-rule" class="text-[11px] font-medium text-slate-700 mt-0.5"></p>
+              <div id="kicker-audio-actions" class="mt-2 flex flex-wrap gap-1.5"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clear Visual Options -->
+        <div id="kicker-options-container" class="grid grid-cols-1 gap-2.5">
+          <!-- Dynamic options injected here -->
+        </div>
+
+        <!-- Bottom Controls -->
+        <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+          <button onclick="showKickerHint()" class="text-slate-500 hover:text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-lg">
+            <span>💡</span> Tipp
+          </button>
+          
+          <button onclick="nextKickerQuestion()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm px-5 py-2 rounded-xl shadow-md shadow-emerald-200 transition flex items-center gap-1.5">
+            <span>Nächster Satz</span>
+            <span>➔</span>
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ================= 5. ACTIVITY: 100 VERBEN LEXIKON ================= -->
+    <section id="sec-lexikon" class="hidden space-y-3">
+      
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <input type="text" id="lexikon-search" oninput="searchLexikon(this.value)" placeholder="🔍 Verb suchen (z.B. essen, springen, malen)..." class="flex-1 min-w-[200px] bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-purple-400">
+
+        <select id="lexikon-filter" onchange="filterLexikon(this.value)" class="bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none">
+          <option value="all">Alle 100 Verben</option>
+          <option value="essen">Essen & Trinken</option>
+          <option value="schule">Schule & Malen</option>
+          <option value="sport">Sport & Bewegung</option>
+          <option value="alltag">Zuhause & Alltag</option>
+          <option value="gefuehle">Gefühle & Sinne</option>
+          <option value="irregular">Nur Zauberverben</option>
+        </select>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="p-3 bg-purple-50/70 border-b border-purple-100 flex items-center justify-between text-xs font-bold text-purple-900">
+          <span id="lexikon-count">100 Verben</span>
+          <span>Klicke auf 🔊, um den Satz anzuhören!</span>
+        </div>
+        <div id="lexikon-container" class="divide-y divide-slate-100 max-h-[500px] overflow-y-auto">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. DATASETS
+    // =========================================================================
+
+    // 100 GERMAN VERBS (HEUTE & GESTERN)
+    const VERBS_DATA = [
+      { id: 1, inf: "essen", cat: "essen", isReg: false, aux: "haben", today: "Heute esse ich ein Eis.", yPre: "Gestern habe ich ein Eis", yPost: ".", correct: "gegessen", options: ["gegessen", "geesst", "isst", "gegesst"], full: "Gestern habe ich ein Eis gegessen.", tip: "Zauberverb! essen ➔ gegessen" },
+      { id: 2, inf: "trinken", cat: "essen", isReg: false, aux: "haben", today: "Heute trinke ich Milch.", yPre: "Gestern habe ich Milch", yPost: ".", correct: "getrunken", options: ["getrunken", "getrinkt", "trank", "getrankt"], full: "Gestern habe ich Milch getrunken.", tip: "Zauberverb! trinken ➔ getrunken" },
+      { id: 3, inf: "kochen", cat: "essen", isReg: true, aux: "haben", today: "Heute koche ich eine Suppe.", yPre: "Gestern habe ich eine Suppe", yPost: ".", correct: "gekocht", options: ["gekocht", "gekochen", "kocht", "geköcht"], full: "Gestern habe ich eine Suppe gekocht.", tip: "Brav: kochen ➔ ge-koch-t" },
+      { id: 4, inf: "backen", cat: "essen", isReg: false, aux: "haben", today: "Heute backe ich einen Kuchen.", yPre: "Gestern habe ich einen Kuchen", yPost: ".", correct: "gebacken", options: ["gebacken", "gebackt", "bäckt", "gebucken"], full: "Gestern habe ich einen Kuchen gebacken.", tip: "Zauberverb! backen ➔ ge-back-en" },
+      { id: 5, inf: "schneiden", cat: "essen", isReg: false, aux: "haben", today: "Heute schneide ich das Brot.", yPre: "Gestern habe ich das Brot", yPost: ".", correct: "geschnitten", options: ["geschnitten", "geschneidet", "geschnitt", "schneidet"], full: "Gestern habe ich das Brot geschnitten.", tip: "Zauberverb! schneiden ➔ geschnitten" },
+      { id: 6, inf: "naschen", cat: "essen", isReg: true, aux: "haben", today: "Heute nasche ich Schokolade.", yPre: "Gestern habe ich Schokolade", yPost: ".", correct: "genascht", options: ["genascht", "genaschen", "nascht", "genäscht"], full: "Gestern habe ich Schokolade genascht.", tip: "Brav: naschen ➔ ge-nasch-t" },
+      { id: 7, inf: "probieren", cat: "essen", isReg: true, aux: "haben", today: "Heute probiere ich die Erdbeere.", yPre: "Gestern habe ich die Erdbeere", yPost: ".", correct: "probiert", options: ["probiert", "geprobiert", "geprobieren", "probiere"], full: "Gestern habe ich die Erdbeere probiert.", tip: "Wörter mit -ieren haben KEIN ge- am Anfang: probiert!" },
+      { id: 8, inf: "schmecken", cat: "essen", isReg: true, aux: "haben", today: "Heute schmeckt der Apfel süß.", yPre: "Gestern hat der Apfel süß", yPost: ".", correct: "geschmeckt", options: ["geschmeckt", "geschmecken", "schmeckt", "geschmöckt"], full: "Gestern hat der Apfel süß geschmeckt.", tip: "Brav: schmecken ➔ ge-schmeck-t" },
+      { id: 9, inf: "frühstücken", cat: "essen", isReg: true, aux: "haben", today: "Heute frühstücke ich Müsli.", yPre: "Gestern habe ich Müsli", yPost: ".", correct: "gefrühstückt", options: ["gefrühstückt", "gefrühstücken", "frühstückt", "gefrühstückte"], full: "Gestern habe ich Müsli gefrühstückt.", tip: "Brav: frühstücken ➔ gefrühstückt" },
+      { id: 10, inf: "schlucken", cat: "essen", isReg: true, aux: "haben", today: "Heute schlucke ich den Saft runter.", yPre: "Gestern habe ich den Saft runter", yPost: ".", correct: "geschluckt", options: ["geschluckt", "geschlucken", "schluckt", "geschlüpft"], full: "Gestern habe ich den Saft runtergeschluckt.", tip: "Brav: schlucken ➔ ge-schluck-t" },
+
+      { id: 11, inf: "lernen", cat: "schule", isReg: true, aux: "haben", today: "Heute lerne ich Deutsch.", yPre: "Gestern habe ich Deutsch", yPost: ".", correct: "gelernt", options: ["gelernt", "gelernen", "lernt", "gelerntet"], full: "Gestern habe ich Deutsch gelernt.", tip: "Brav: lernen ➔ ge-lern-t" },
+      { id: 12, inf: "schreiben", cat: "schule", isReg: false, aux: "haben", today: "Heute schreibe ich ein Wort.", yPre: "Gestern habe ich ein Wort", yPost: ".", correct: "geschrieben", options: ["geschrieben", "geschreibt", "schreibt", "geschrobt"], full: "Gestern habe ich ein Wort geschrieben.", tip: "Zauberverb! schreiben ➔ ge-schrieb-en" },
+      { id: 13, inf: "lesen", cat: "schule", isReg: false, aux: "haben", today: "Heute lese ich ein Buch.", yPre: "Gestern habe ich ein Buch", yPost: ".", correct: "gelesen", options: ["gelesen", "gelest", "liest", "gelast"], full: "Gestern habe ich ein Buch gelesen.", tip: "Zauberverb! lesen ➔ ge-les-en" },
+      { id: 14, inf: "malen", cat: "schule", isReg: true, aux: "haben", today: "Heute male ich ein buntes Bild.", yPre: "Gestern habe ich ein buntes Bild", yPost: ".", correct: "gemalt", options: ["gemalt", "gemalen", "malt", "gemält"], full: "Gestern habe ich ein buntes Bild gemalt.", tip: "Brav: malen ➔ ge-mal-t" },
+      { id: 15, inf: "zeichnen", cat: "schule", isReg: true, aux: "haben", today: "Heute zeichne ich eine Katze.", yPre: "Gestern habe ich eine Katze", yPost: ".", correct: "gezeichnet", options: ["gezeichnet", "gezeichnt", "zeichnet", "gezeichnen"], full: "Gestern habe ich eine Katze gezeichnet.", tip: "Brav mit -et: ge-zeichn-et" },
+      { id: 16, inf: "basteln", cat: "schule", isReg: true, aux: "haben", today: "Heute bastele ich ein Schiff.", yPre: "Gestern habe ich ein Schiff", yPost: ".", correct: "gebastelt", options: ["gebastelt", "gebasteln", "bastelt", "gebastelte"], full: "Gestern habe ich ein Schiff gebastelt.", tip: "Brav: basteln ➔ ge-bastel-t" },
+      { id: 17, inf: "kleben", cat: "schule", isReg: true, aux: "haben", today: "Heute klebe ich das Foto ein.", yPre: "Gestern habe ich das Foto ein", yPost: ".", correct: "geklebt", options: ["geklebt", "gekleben", "klebt", "gekliebt"], full: "Gestern habe ich das Foto eingeklebt.", tip: "Brav: kleben ➔ ge-kleb-t" },
+      { id: 18, inf: "radieren", cat: "schule", isReg: true, aux: "haben", today: "Heute radiere ich den Fehler weg.", yPre: "Gestern habe ich den Fehler weg", yPost: ".", correct: "radiert", options: ["radiert", "geradiert", "geradieren", "radiere"], full: "Gestern habe ich den Fehler wegradiert.", tip: "Wörter auf -ieren: radiert (ohne ge-)!" },
+      { id: 19, inf: "spitzen", cat: "schule", isReg: true, aux: "haben", today: "Heute spitze ich den Bleistift.", yPre: "Gestern habe ich den Bleistift", yPost: ".", correct: "gespitzt", options: ["gespitzt", "gespitzen", "spitzt", "gespitzet"], full: "Gestern habe ich den Bleistift gespitzt.", tip: "Brav: spitzen ➔ ge-spitz-t" },
+      { id: 20, inf: "rechnen", cat: "schule", isReg: true, aux: "haben", today: "Heute rechne ich eine Plusaufgabe.", yPre: "Gestern habe ich eine Plusaufgabe", yPost: ".", correct: "gerechnet", options: ["gerechnet", "gerechnt", "rechnet", "gerechnen"], full: "Gestern habe ich eine Plusaufgabe gerechnet.", tip: "Brav mit -et: ge-rechn-et" },
+      { id: 21, inf: "zählen", cat: "schule", isReg: true, aux: "haben", today: "Heute zähle ich bis zwanzig.", yPre: "Gestern habe ich bis zwanzig", yPost: ".", correct: "gezählt", options: ["gezählt", "gezählen", "zählt", "gezohlt"], full: "Gestern habe ich bis zwanzig gezählt.", tip: "Brav: zählen ➔ ge-zähl-t" },
+      { id: 22, inf: "fragen", cat: "schule", isReg: true, aux: "haben", today: "Heute frage ich meine Lehrerin.", yPre: "Gestern habe ich meine Lehrerin", yPost: ".", correct: "gefragt", options: ["gefragt", "gefragen", "fragt", "gefrügt"], full: "Gestern habe ich meine Lehrerin gefragt.", tip: "Brav: fragen ➔ ge-frag-t" },
+      { id: 23, inf: "antworten", cat: "schule", isReg: true, aux: "haben", today: "Heute antworte ich ganz schnell.", yPre: "Gestern habe ich ganz schnell", yPost: ".", correct: "geantwortet", options: ["geantwortet", "geantworted", "antwortet", "geantworten"], full: "Gestern habe ich ganz schnell geantwortet.", tip: "Brav mit -et: ge-antwort-et" },
+      { id: 24, inf: "verstehen", cat: "schule", isReg: false, aux: "haben", today: "Heute verstehe ich die Aufgabe.", yPre: "Gestern habe ich die Aufgabe", yPost: ".", correct: "verstanden", options: ["verstanden", "versteht", "geverstanden", "verstehtet"], full: "Gestern habe ich die Aufgabe verstanden.", tip: "Zauberverb! verstehen ➔ verstanden" },
+      { id: 25, inf: "wissen", cat: "schule", isReg: false, aux: "haben", today: "Heute weiß ich die richtige Lösung.", yPre: "Gestern habe ich die richtige Lösung", yPost: ".", correct: "gewusst", options: ["gewusst", "gewisst", "weiß", "gewissen"], full: "Gestern habe ich die richtige Lösung gewusst.", tip: "Zauberverb! wissen ➔ gewusst" },
+      { id: 26, inf: "vergessen", cat: "schule", isReg: false, aux: "haben", today: "Heute vergesse ich mein Federmäppchen.", yPre: "Gestern habe ich mein Federmäppchen", yPost: ".", correct: "vergessen", options: ["vergessen", "vergesst", "gevergesst", "vergasset"], full: "Gestern habe ich mein Federmäppchen vergessen.", tip: "vergessen bleibt vergessen!" },
+      { id: 27, inf: "melden", cat: "schule", isReg: true, aux: "haben", today: "Heute melde ich mich im Unterricht.", yPre: "Gestern habe ich mich im Unterricht", yPost: ".", correct: "gemeldet", options: ["gemeldet", "gemeldt", "meldet", "gemelden"], full: "Gestern habe ich mich im Unterricht gemeldet.", tip: "Brav mit -et: ge-meld-et" },
+      { id: 28, inf: "üben", cat: "schule", isReg: true, aux: "haben", today: "Heute übe ich neue Wörter.", yPre: "Gestern habe ich neue Wörter", yPost: ".", correct: "geübt", options: ["geübt", "geüben", "übt", "geöbt"], full: "Gestern habe ich neue Wörter geübt.", tip: "Brav: üben ➔ ge-üb-t" },
+
+      { id: 29, inf: "spielen", cat: "sport", isReg: true, aux: "haben", today: "Heute spiele ich im Garten.", yPre: "Gestern habe ich im Garten", yPost: ".", correct: "gespielt", options: ["gespielt", "gespielen", "spielt", "gespielet"], full: "Gestern habe ich im Garten gespielt.", tip: "Brav: spielen ➔ ge-spiel-t" },
+      { id: 30, inf: "laufen", cat: "sport", isReg: false, aux: "sein", today: "Heute laufe ich sehr schnell.", yPre: "Gestern bin ich sehr schnell", yPost: ".", correct: "gelaufen", options: ["gelaufen", "gelauft", "läuft", "geliefen"], full: "Gestern bin ich sehr schnell gelaufen.", tip: "Bewegung mit 'sein'! laufen ➔ gelaufen" },
+      { id: 31, inf: "rennen", cat: "sport", isReg: false, aux: "sein", today: "Heute renne ich zum Spielplatz.", yPre: "Gestern bin ich zum Spielplatz", yPost: ".", correct: "gerannt", options: ["gerannt", "gerennt", "rennt", "geronnen"], full: "Gestern bin ich zum Spielplatz gerannt.", tip: "Zauberverb! rennen ➔ gerannt" },
+      { id: 32, inf: "gehen", cat: "sport", isReg: false, aux: "sein", today: "Heute gehe ich in die Schule.", yPre: "Gestern bin ich in die Schule", yPost: ".", correct: "gegangen", options: ["gegangen", "gegeht", "geht", "gegingen"], full: "Gestern bin ich in die Schule gegangen.", tip: "Zauberverb mit 'sein'! gehen ➔ gegangen" },
+      { id: 33, inf: "springen", cat: "sport", isReg: false, aux: "sein", today: "Heute springe ich hoch.", yPre: "Gestern bin ich hoch", yPost: ".", correct: "gesprungen", options: ["gesprungen", "gespringt", "springt", "gesprang"], full: "Gestern bin ich hoch gesprungen.", tip: "Zauberverb! springen ➔ gesprungen" },
+      { id: 34, inf: "hüpfen", cat: "sport", isReg: true, aux: "sein", today: "Heute hüpfe ich auf einem Bein.", yPre: "Gestern bin ich auf einem Bein", yPost: ".", correct: "gehüpft", options: ["gehüpft", "gehüpfen", "hüpft", "gehopft"], full: "Gestern bin ich auf einem Bein gehüpft.", tip: "Brav mit 'sein': hüpfen ➔ ge-hüpf-t" },
+      { id: 35, inf: "klettern", cat: "sport", isReg: true, aux: "sein", today: "Heute klettere ich auf das Gerüst.", yPre: "Gestern bin ich auf das Gerüst", yPost: ".", correct: "geklettert", options: ["geklettert", "geklettern", "klettert", "gekletterte"], full: "Gestern bin ich auf das Gerüst geklettert.", tip: "Brav mit 'sein': klettern ➔ ge-kletter-t" },
+      { id: 36, inf: "schwimmen", cat: "sport", isReg: false, aux: "sein", today: "Heute schwimme ich im Schwimmbad.", yPre: "Gestern bin ich im Schwimmbad", yPost: ".", correct: "geschwommen", options: ["geschwommen", "geschwimmt", "schwimmt", "geschwummen"], full: "Gestern bin ich im Schwimmbad geschwommen.", tip: "Zauberverb! schwimmen ➔ geschwommen" },
+      { id: 37, inf: "tauchen", cat: "sport", isReg: true, aux: "sein", today: "Heute tauche ich nach Ringen.", yPre: "Gestern bin ich nach Ringen", yPost: ".", correct: "getaucht", options: ["getaucht", "getauchen", "taucht", "getäucht"], full: "Gestern bin ich nach Ringen getaucht.", tip: "Brav mit 'sein': tauchen ➔ ge-tauch-t" },
+      { id: 38, inf: "fahren", cat: "sport", isReg: false, aux: "sein", today: "Heute fahre ich mit dem Roller.", yPre: "Gestern bin ich mit dem Roller", yPost: ".", correct: "gefahren", options: ["gefahren", "gefahrt", "fährt", "gefuhrt"], full: "Gestern bin ich mit dem Roller gefahren.", tip: "Zauberverb mit 'sein'! fahren ➔ ge-fahr-en" },
+      { id: 39, inf: "reiten", cat: "sport", isReg: false, aux: "sein", today: "Heute reite ich auf einem Pferd.", yPre: "Gestern bin ich auf einem Pferd", yPost: ".", correct: "geritten", options: ["geritten", "gereitet", "reitet", "geratten"], full: "Gestern bin ich auf einem Pferd geritten.", tip: "Zauberverb! reiten ➔ geritten" },
+      { id: 40, inf: "fliegen", cat: "sport", isReg: false, aux: "sein", today: "Heute fliegt der Drachen hoch.", yPre: "Gestern ist der Drachen hoch", yPost: ".", correct: "geflogen", options: ["geflogen", "gefliegt", "fliegt", "geflugen"], full: "Gestern ist der Drachen hoch geflogen.", tip: "Zauberverb! fliegen ➔ geflogen" },
+      { id: 41, inf: "wandern", cat: "sport", isReg: true, aux: "sein", today: "Heute wandere ich durch den Wald.", yPre: "Gestern bin ich durch den Wald", yPost: ".", correct: "gewandert", options: ["gewandert", "gewandern", "wandert", "gewanderte"], full: "Gestern bin ich durch den Wald gewandert.", tip: "Brav mit 'sein': wandern ➔ ge-wander-t" },
+      { id: 42, inf: "stolpern", cat: "sport", isReg: true, aux: "sein", today: "Heute stolpere ich über einen Stein.", yPre: "Gestern bin ich über einen Stein", yPost: ".", correct: "gestolpert", options: ["gestolpert", "gestolpern", "stolpert", "gestolperte"], full: "Gestern bin ich über einen Stein gestolpert.", tip: "Brav mit 'sein': stolpern ➔ ge-stolper-t" },
+      { id: 43, inf: "fallen", cat: "sport", isReg: false, aux: "sein", today: "Heute falle ich nicht hin.", yPre: "Gestern bin ich nicht hin", yPost: ".", correct: "gefallen", options: ["gefallen", "gefallt", "fällt", "gefollen"], full: "Gestern bin ich nicht hingefallen.", tip: "Zauberverb mit 'sein'! fallen ➔ ge-fall-en" },
+      { id: 44, inf: "tanzen", cat: "sport", isReg: true, aux: "haben", today: "Heute tanze ich zur Musik.", yPre: "Gestern habe ich zur Musik", yPost: ".", correct: "getanzt", options: ["getanzt", "getanzen", "tanzt", "getänzt"], full: "Gestern habe ich zur Musik getanzt.", tip: "Brav: tanzen ➔ ge-tanz-t" },
+      { id: 45, inf: "werfen", cat: "sport", isReg: false, aux: "haben", today: "Heute werfe ich den Ball.", yPre: "Gestern habe ich den Ball", yPost: ".", correct: "geworfen", options: ["geworfen", "gewerft", "wirft", "gewurfen"], full: "Gestern habe ich den Ball geworfen.", tip: "Zauberverb! werfen ➔ geworfen" },
+      { id: 46, inf: "fangen", cat: "sport", isReg: false, aux: "haben", today: "Heute fange ich den Ball.", yPre: "Gestern habe ich den Ball", yPost: ".", correct: "gefangen", options: ["gefangen", "gefangt", "fängt", "gefungen"], full: "Gestern habe ich den Ball gefangen.", tip: "Zauberverb! fangen ➔ ge-fang-en" },
+      { id: 47, inf: "schießen", cat: "sport", isReg: false, aux: "haben", today: "Heute schieße ich ein Tor.", yPre: "Gestern habe ich ein Tor", yPost: ".", correct: "geschossen", options: ["geschossen", "geschießt", "schießt", "geschusst"], full: "Gestern habe ich ein Tor geschossen.", tip: "Zauberverb! schießen ➔ geschossen" },
+      { id: 48, inf: "gewinnen", cat: "sport", isReg: false, aux: "haben", today: "Heute gewinne ich das Spiel.", yPre: "Gestern habe ich das Spiel", yPost: ".", correct: "gewonnen", options: ["gewonnen", "gewinnt", "gegewonnen", "gewonnt"], full: "Gestern habe ich das Spiel gewonnen.", tip: "Zauberverb! gewinnen ➔ gewonnen" },
+      { id: 49, inf: "verlieren", cat: "sport", isReg: false, aux: "haben", today: "Heute verliere ich die Runde.", yPre: "Gestern habe ich die Runde", yPost: ".", correct: "verloren", options: ["verloren", "verliert", "geverloren", "verlor"], full: "Gestern habe ich die Runde verloren.", tip: "Zauberverb! verlieren ➔ verloren" },
+      { id: 50, inf: "verstecken", cat: "sport", isReg: true, aux: "haben", today: "Heute verstecke ich mich hinter dem Baum.", yPre: "Gestern habe ich mich hinter dem Baum", yPost: ".", correct: "versteckt", options: ["versteckt", "verstecken", "geversteckt", "verstuckt"], full: "Gestern habe ich mich hinter dem Baum versteckt.", tip: "Wörter mit ver- haben kein ge-: versteckt!" },
+      { id: 51, inf: "suchen", cat: "sport", isReg: true, aux: "haben", today: "Heute suche ich mein Spielzeug.", yPre: "Gestern habe ich mein Spielzeug", yPost: ".", correct: "gesucht", options: ["gesucht", "gesuchen", "sucht", "gesücht"], full: "Gestern habe ich mein Spielzeug gesucht.", tip: "Brav: suchen ➔ ge-such-t" },
+      { id: 52, inf: "finden", cat: "sport", isReg: false, aux: "haben", today: "Heute finde ich eine Muschel.", yPre: "Gestern habe ich eine Muschel", yPost: ".", correct: "gefunden", options: ["gefunden", "gefindet", "findet", "gefandt"], full: "Gestern habe ich eine Muschel gefunden.", tip: "Zauberverb! finden ➔ gefunden" },
+
+      { id: 53, inf: "schlafen", cat: "alltag", isReg: false, aux: "haben", today: "Heute schlafe ich gemütlich.", yPre: "Gestern habe ich gemütlich", yPost: ".", correct: "geschlafen", options: ["geschlafen", "geschlaft", "schläft", "geschliefen"], full: "Gestern habe ich gemütlich geschlafen.", tip: "Zauberverb! schlafen ➔ ge-schlaf-en" },
+      { id: 54, inf: "aufwachen", cat: "alltag", isReg: true, aux: "sein", today: "Heute wache ich fröhlich auf.", yPre: "Gestern bin ich fröhlich", yPost: ".", correct: "aufgewacht", options: ["aufgewacht", "aufgewachen", "wacht auf", "aufgewachte"], full: "Gestern bin ich fröhlich aufgewacht.", tip: "Trennbar mit 'sein': auf-ge-wacht" },
+      { id: 55, inf: "aufstehen", cat: "alltag", isReg: false, aux: "sein", today: "Heute stehe ich früh auf.", yPre: "Gestern bin ich früh", yPost: ".", correct: "aufgestanden", options: ["aufgestanden", "aufgesteht", "steht auf", "aufgestanden"], full: "Gestern bin ich früh aufgestanden.", tip: "Zauberverb mit 'sein': auf-ge-standen" },
+      { id: 56, inf: "einschlafen", cat: "alltag", isReg: false, aux: "sein", today: "Heute schlafe ich schnell ein.", yPre: "Gestern bin ich schnell", yPost: ".", correct: "eingeschlafen", options: ["eingeschlafen", "eingeschlaft", "schläft ein", "eingeschliefen"], full: "Gestern bin ich schnell eingeschlafen.", tip: "Zauberverb mit 'sein': ein-ge-schlafen" },
+      { id: 57, inf: "putzen", cat: "alltag", isReg: true, aux: "haben", today: "Heute putze ich mir die Zähne.", yPre: "Gestern habe ich mir die Zähne", yPost: ".", correct: "geputzt", options: ["geputzt", "geputzen", "putzt", "gepützt"], full: "Gestern habe ich mir die Zähne geputzt.", tip: "Brav: putzen ➔ ge-putz-t" },
+      { id: 58, inf: "waschen", cat: "alltag", isReg: false, aux: "haben", today: "Heute wasche ich meine Hände mit Seife.", yPre: "Gestern habe ich meine Hände mit Seife", yPost: ".", correct: "gewaschen", options: ["gewaschen", "gewascht", "wäscht", "gewuschen"], full: "Gestern habe ich meine Hände mit Seife gewaschen.", tip: "Zauberverb! waschen ➔ ge-wasch-en" },
+      { id: 59, inf: "duschen", cat: "alltag", isReg: true, aux: "haben", today: "Heute dusche ich nach dem Sport.", yPre: "Gestern habe ich nach dem Sport", yPost: ".", correct: "geduscht", options: ["geduscht", "geduschen", "duscht", "geduschte"], full: "Gestern habe ich nach dem Sport geduscht.", tip: "Brav: duschen ➔ ge-dusch-t" },
+      { id: 60, inf: "baden", cat: "alltag", isReg: true, aux: "haben", today: "Heute bade ich mit viel Schaum.", yPre: "Gestern habe ich mit viel Schaum", yPost: ".", correct: "gebadet", options: ["gebadet", "gebadt", "badet", "gebaden"], full: "Gestern habe ich mit viel Schaum gebadet.", tip: "Brav mit -et: ge-bad-et" },
+      { id: 61, inf: "anziehen", cat: "alltag", isReg: false, aux: "haben", today: "Heute ziehe ich warme Socken an.", yPre: "Gestern habe ich warme Socken", yPost: ".", correct: "angezogen", options: ["angezogen", "angezieht", "zieht an", "angezogt"], full: "Gestern habe ich warme Socken angezogen.", tip: "Zauberverb: an-ge-zogen" },
+      { id: 62, inf: "ausziehen", cat: "alltag", isReg: false, aux: "haben", today: "Heute ziehe ich die Schuhe aus.", yPre: "Gestern habe ich die Schuhe", yPost: ".", correct: "ausgezogen", options: ["ausgezogen", "ausgezieht", "zieht aus", "ausgezogt"], full: "Gestern habe ich die Schuhe ausgezogen.", tip: "Zauberverb: aus-ge-zogen" },
+      { id: 63, inf: "kämmen", cat: "alltag", isReg: true, aux: "haben", today: "Heute kämme ich meine Haare.", yPre: "Gestern habe ich meine Haare", yPost: ".", correct: "gekämmt", options: ["gekämmt", "gekämmen", "kämmt", "gekammt"], full: "Gestern habe ich meine Haare gekämmt.", tip: "Brav: kämmen ➔ ge-kämm-t" },
+      { id: 64, inf: "aufräumen", cat: "alltag", isReg: true, aux: "haben", today: "Heute räume ich mein Zimmer auf.", yPre: "Gestern habe ich mein Zimmer", yPost: ".", correct: "aufgeräumt", options: ["aufgeräumt", "aufgeräumen", "räumt auf", "aufgeräumte"], full: "Gestern habe ich mein Zimmer aufgeräumt.", tip: "Trennbar: auf-ge-räum-t" },
+      { id: 65, inf: "helfen", cat: "alltag", isReg: false, aux: "haben", today: "Heute helfe ich Mama beim Kochen.", yPre: "Gestern habe ich Mama beim Kochen", yPost: ".", correct: "geholfen", options: ["geholfen", "gehelft", "hilft", "gehülft"], full: "Gestern habe ich Mama beim Kochen geholfen.", tip: "Zauberverb! helfen ➔ geholfen" },
+      { id: 66, inf: "machen", cat: "alltag", isReg: true, aux: "haben", today: "Heute mache ich meine Hausaufgaben.", yPre: "Gestern habe ich meine Hausaufgaben", yPost: ".", correct: "gemacht", options: ["gemacht", "gemachen", "macht", "gemächt"], full: "Gestern habe ich meine Hausaufgaben gemacht.", tip: "Brav: machen ➔ ge-mach-t" },
+      { id: 67, inf: "aufmachen", cat: "alltag", isReg: true, aux: "haben", today: "Heute mache ich das Fenster auf.", yPre: "Gestern habe ich das Fenster", yPost: ".", correct: "aufgemacht", options: ["aufgemacht", "aufgemachen", "macht auf", "aufgemächte"], full: "Gestern habe ich das Fenster aufgemacht.", tip: "Trennbar: auf-ge-mach-t" },
+      { id: 68, inf: "zumachen", cat: "alltag", isReg: true, aux: "haben", today: "Heute mache ich die Tür zu.", yPre: "Gestern habe ich die Tür", yPost: ".", correct: "zugemacht", options: ["zugemacht", "zugemachen", "macht zu", "zugemachte"], full: "Gestern habe ich die Tür zugemacht.", tip: "Trennbar: zu-ge-mach-t" },
+      { id: 69, inf: "packen", cat: "alltag", isReg: true, aux: "haben", today: "Heute packe ich meine Schultasche.", yPre: "Gestern habe ich meine Schultasche", yPost: ".", correct: "gepackt", options: ["gepackt", "gepacken", "packt", "gepäckt"], full: "Gestern habe ich meine Schultasche gepackt.", tip: "Brav: packen ➔ ge-pack-t" },
+      { id: 70, inf: "holen", cat: "alltag", isReg: true, aux: "haben", today: "Heute hole ich meine Jacke.", yPre: "Gestern habe ich meine Jacke", yPost: ".", correct: "geholt", options: ["geholen", "geholt", "holt", "gehölt"], full: "Gestern habe ich meine Jacke geholt.", tip: "Brav: holen ➔ ge-hol-t" },
+      { id: 71, inf: "bringen", cat: "alltag", isReg: false, aux: "haben", today: "Heute bringe ich ein Buch mit.", yPre: "Gestern habe ich ein Buch mit", yPost: ".", correct: "gebracht", options: ["gebracht", "gebringt", "bringt", "gebrungen"], full: "Gestern habe ich ein Buch mitgebracht.", tip: "Zauberverb! bringen ➔ gebracht" },
+      { id: 72, inf: "nehmen", cat: "alltag", isReg: false, aux: "haben", today: "Heute nehme ich einen roten Apfel.", yPre: "Gestern habe ich einen roten Apfel", yPost: ".", correct: "genommen", options: ["genommen", "genehmt", "nimmt", "genammt"], full: "Gestern habe ich einen roten Apfel genommen.", tip: "Zauberverb! nehmen ➔ genommen" },
+      { id: 73, inf: "geben", cat: "alltag", isReg: false, aux: "haben", today: "Heute gebe ich dir den Stift.", yPre: "Gestern habe ich dir den Stift", yPost: ".", correct: "gegeben", options: ["gegeben", "gegebt", "gibt", "gegoben"], full: "Gestern habe ich dir den Stift gegeben.", tip: "Zauberverb! geben ➔ ge-geb-en" },
+      { id: 74, inf: "tragen", cat: "alltag", isReg: false, aux: "haben", today: "Heute trage ich den Schulranzen.", yPre: "Gestern habe ich den Schulranzen", yPost: ".", correct: "getragen", options: ["getragen", "getragt", "trägt", "getrogen"], full: "Gestern habe ich den Schulranzen getragen.", tip: "Zauberverb! tragen ➔ ge-trag-en" },
+      { id: 75, inf: "stellen", cat: "alltag", isReg: true, aux: "haben", today: "Heute stelle ich das Glas auf den Tisch.", yPre: "Gestern habe ich das Glas auf den Tisch", yPost: ".", correct: "gestellt", options: ["gestellt", "gestellen", "stellt", "gestallt"], full: "Gestern habe ich das Glas auf den Tisch gestellt.", tip: "Brav: stellen ➔ ge-stell-t" },
+      { id: 76, inf: "legen", cat: "alltag", isReg: true, aux: "haben", today: "Heute lege ich das Heft in die Mappe.", yPre: "Gestern habe ich das Heft in die Mappe", yPost: ".", correct: "gelegt", options: ["gelegt", "gelegen", "legt", "gelag"], full: "Gestern habe ich das Heft in die Mappe gelegt.", tip: "legen ➔ gelegt" },
+      { id: 77, inf: "setzen", cat: "alltag", isReg: true, aux: "haben", today: "Heute setze ich mich auf den Teppich.", yPre: "Gestern habe ich mich auf den Teppich", yPost: ".", correct: "gesetzt", options: ["gesetzt", "gesetzen", "setzt", "gesotzt"], full: "Gestern habe ich mich auf den Teppich gesetzt.", tip: "Brav: setzen ➔ ge-setz-t" },
+      { id: 78, inf: "sitzen", cat: "alltag", isReg: false, aux: "haben", today: "Heute sitze ich auf dem Stuhl.", yPre: "Gestern habe ich auf dem Stuhl", yPost: ".", correct: "gesessen", options: ["gesessen", "gesitzt", "sitzt", "geseßt"], full: "Gestern habe ich auf dem Stuhl gesessen.", tip: "Zauberverb! sitzen ➔ gesessen" },
+      { id: 79, inf: "stehen", cat: "alltag", isReg: false, aux: "haben", today: "Heute stehe ich an der Schaukel.", yPre: "Gestern habe ich an der Schaukel", yPost: ".", correct: "gestanden", options: ["gestanden", "gesteht", "steht", "gestunden"], full: "Gestern habe ich an der Schaukel gestanden.", tip: "Zauberverb! stehen ➔ gestanden" },
+      { id: 80, inf: "liegen", cat: "alltag", isReg: false, aux: "haben", today: "Heute liege ich gemütlich im Bett.", yPre: "Gestern habe ich gemütlich im Bett", yPost: ".", correct: "gelegen", options: ["gelegen", "geliegt", "liegt", "gelogt"], full: "Gestern habe ich gemütlich im Bett gelegen.", tip: "Zauberverb! liegen ➔ gelegen" },
+      { id: 81, inf: "bleiben", cat: "alltag", isReg: false, aux: "sein", today: "Heute bleibe ich zu Hause.", yPre: "Gestern bin ich zu Hause", yPost: ".", correct: "geblieben", options: ["geblieben", "gebleibt", "bleibt", "geblaben"], full: "Gestern bin ich zu Hause geblieben.", tip: "Mit 'sein'! bleiben ➔ ge-blieb-en" },
+
+      { id: 82, inf: "kommen", cat: "gefuehle", isReg: false, aux: "sein", today: "Heute komme ich zu Besuch.", yPre: "Gestern bin ich zu Besuch", yPost: ".", correct: "gekommen", options: ["gekommen", "gekommt", "kommt", "gekammen"], full: "Gestern bin ich zu Besuch gekommen.", tip: "Mit 'sein'! kommen ➔ ge-komm-en" },
+      { id: 83, inf: "sprechen", cat: "gefuehle", isReg: false, aux: "haben", today: "Heute spreche ich laut und deutlich.", yPre: "Gestern habe ich laut und deutlich", yPost: ".", correct: "gesprochen", options: ["gesprochen", "gesprecht", "spricht", "gesprucht"], full: "Gestern habe ich laut und deutlich gesprochen.", tip: "Zauberverb! sprechen ➔ gesprochen" },
+      { id: 84, inf: "reden", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute rede ich mit meiner Freundin.", yPre: "Gestern habe ich mit meiner Freundin", yPost: ".", correct: "geredet", options: ["geredet", "geredt", "redet", "gereden"], full: "Gestern habe ich mit meiner Freundin geredet.", tip: "Brav mit -et: ge-red-et" },
+      { id: 85, inf: "sagen", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute sage ich ganz lieb Danke.", yPre: "Gestern habe ich ganz lieb Danke", yPost: ".", correct: "gesagt", options: ["gesagt", "gesagen", "sagt", "gesägt"], full: "Gestern habe ich ganz lieb Danke gesagt.", tip: "Brav: sagen ➔ ge-sag-t" },
+      { id: 86, inf: "rufen", cat: "gefuehle", isReg: false, aux: "haben", today: "Heute rufe ich ganz laut Hallo.", yPre: "Gestern habe ich ganz laut Hallo", yPost: ".", correct: "gerufen", options: ["gerufen", "geruft", "ruft", "gerüfen"], full: "Gestern habe ich ganz laut Hallo gerufen.", tip: "Zauberverb! rufen ➔ ge-ruf-en" },
+      { id: 87, inf: "flüstern", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute flüstere ich ein Geheimnis.", yPre: "Gestern habe ich ein Geheimnis", yPost: ".", correct: "geflüstert", options: ["geflüstert", "geflüstern", "flüstert", "geflüsterte"], full: "Gestern habe ich ein Geheimnis geflüstert.", tip: "Brav: flüstern ➔ ge-flüster-t" },
+      { id: 88, inf: "lachen", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute lache ich über den Witz.", yPre: "Gestern habe ich über den Witz", yPost: ".", correct: "gelacht", options: ["gelacht", "gelachen", "lacht", "gelächt"], full: "Gestern habe ich über den Witz gelacht.", tip: "Brav: lachen ➔ ge-lach-t" },
+      { id: 89, inf: "weinen", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute weine ich nicht mehr.", yPre: "Gestern habe ich nicht mehr", yPost: ".", correct: "geweint", options: ["geweint", "geweinen", "weint", "gewaint"], full: "Gestern habe ich nicht mehr geweint.", tip: "Brav: weinen ➔ ge-wein-t" },
+      { id: 90, inf: "lächeln", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute lächele ich Papa an.", yPre: "Gestern habe ich Papa an", yPost: ".", correct: "gelächelt", options: ["gelächelt", "gelächeln", "lächelt", "gelacht"], full: "Gestern habe ich Papa angelächelt.", tip: "Brav: lächeln ➔ ge-lächel-t" },
+      { id: 91, inf: "singen", cat: "gefuehle", isReg: false, aux: "haben", today: "Heute singe ich ein Geburtstagslied.", yPre: "Gestern habe ich ein Geburtstagslied", yPost: ".", correct: "gesungen", options: ["gesungen", "gesingt", "singt", "gesangt"], full: "Gestern habe ich ein Geburtstagslied gesungen.", tip: "Zauberverb! singen ➔ gesungen" },
+      { id: 92, inf: "hören", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute höre ich ein spannendes Hörspiel.", yPre: "Gestern habe ich ein spannendes Hörspiel", yPost: ".", correct: "gehört", options: ["gehört", "gehören", "hört", "gehorcht"], full: "Gestern habe ich ein spannendes Hörspiel gehört.", tip: "Brav: hören ➔ ge-hör-t" },
+      { id: 93, inf: "zuhören", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute höre ich der Geschichte zu.", yPre: "Gestern habe ich der Geschichte", yPost: ".", correct: "zugehört", options: ["zugehört", "zugehören", "hört zu", "zugehorcht"], full: "Gestern habe ich der Geschichte zugehört.", tip: "Trennbar: zu-ge-hör-t" },
+      { id: 94, inf: "sehen", cat: "gefuehle", isReg: false, aux: "haben", today: "Heute sehe ich ein Eichhörnchen.", yPre: "Gestern habe ich ein Eichhörnchen", yPost: ".", correct: "gesehen", options: ["gesehen", "gesieht", "sieht", "gesahen"], full: "Gestern habe ich ein Eichhörnchen gesehen.", tip: "Zauberverb! sehen ➔ ge-seh-en" },
+      { id: 95, inf: "schauen", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute schaue ich aus dem Fenster.", yPre: "Gestern habe ich aus dem Fenster", yPost: ".", correct: "geschaut", options: ["geschaut", "geschauen", "schaut", "geschäut"], full: "Gestern habe ich aus dem Fenster geschaut.", tip: "Brav: schauen ➔ ge-schau-t" },
+      { id: 96, inf: "riechen", cat: "gefuehle", isReg: false, aux: "haben", today: "Heute riecht die Blume herrlich.", yPre: "Gestern hat die Blume herrlich", yPost: ".", correct: "gerochen", options: ["gerochen", "geriecht", "riecht", "gerucht"], full: "Gestern hat die Blume herrlich gerochen.", tip: "Zauberverb! riechen ➔ gerochen" },
+      { id: 97, inf: "fühlen", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute fühle ich mich mutig.", yPre: "Gestern habe ich mich mutig", yPost: ".", correct: "gefühlt", options: ["gefühlt", "gefühlen", "fühlt", "gefehlt"], full: "Gestern habe ich mich mutig gefühlt.", tip: "Brav: fühlen ➔ ge-fühl-t" },
+      { id: 98, inf: "freuen", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute freue ich mich über die Sonne.", yPre: "Gestern habe ich mich über die Sonne", yPost: ".", correct: "gefreut", options: ["gefreut", "gefreuen", "freut", "gefräut"], full: "Gestern habe ich mich über die Sonne gefreut.", tip: "Brav: freuen ➔ ge-freu-t" },
+      { id: 99, inf: "wünschen", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute wünsche ich mir ein Buch.", yPre: "Gestern habe ich mir ein Buch", yPost: ".", correct: "gewünscht", options: ["gewünscht", "gewünschen", "wünscht", "gewunscht"], full: "Gestern habe ich mir ein Buch gewünscht.", tip: "Brav: wünschen ➔ ge-wünsch-t" },
+      { id: 100, inf: "lieben", cat: "gefuehle", isReg: true, aux: "haben", today: "Heute liebe ich warme Pfannkuchen.", yPre: "Gestern habe ich warme Pfannkuchen", yPost: ".", correct: "geliebt", options: ["geliebt", "gelieben", "liebt", "geliebet"], full: "Gestern habe ich warme Pfannkuchen geliebt.", tip: "Brav: lieben ➔ ge-lieb-t" }
+    ];
+
+    // SORTING HABEN VS SEIN DATASET
+    const SORT_VERBS = [
+      { verb: "schwimmen", emoji: "🏊‍♀️", type: "sein", full: "Gestern bin ich im Schwimmbad geschwommen.", hint: "Schwimmen ist Bewegung von A nach B durch das Wasser ➔ SEIN!" },
+      { verb: "laufen", emoji: "🏃‍♀️", type: "sein", full: "Gestern bin ich ganz schnell gelaufen.", hint: "Laufen ist Bewegung auf den Beinen von A nach B ➔ SEIN!" },
+      { verb: "spazieren", emoji: "🚶‍♀️", type: "sein", full: "Gestern bin ich durch den Park spaziert.", hint: "Spazieren ist ein Ausflug von A nach B ➔ SEIN!" },
+      { verb: "gehen", emoji: "👟", type: "sein", full: "Gestern bin ich in die Schule gegangen.", hint: "Gehen bringt dich an einen neuen Ort ➔ SEIN!" },
+      { verb: "fahren", emoji: "🚲", type: "sein", full: "Gestern bin ich mit dem Roller gefahren.", hint: "Fahren bringt dich von A nach B ➔ SEIN!" },
+      { verb: "rennen", emoji: "💨", type: "sein", full: "Gestern bin ich zum Spielplatz gerannt.", hint: "Rennen ist schnelle Fortbewegung ➔ SEIN!" },
+      { verb: "fliegen", emoji: "✈️", type: "sein", full: "Gestern bin ich durch die Luft geflogen.", hint: "Fliegen ist Reisen am Himmel ➔ SEIN!" },
+      { verb: "klettern", emoji: "🧗‍♀️", type: "sein", full: "Gestern bin ich auf den Baum geklettert.", hint: "Klettern ist Bewegung nach oben ➔ SEIN!" },
+      { verb: "springen", emoji: "🦘", type: "sein", full: "Gestern bin ich auf dem Trampolin gesprungen.", hint: "Springen bewegt den Körper durch die Luft ➔ SEIN!" },
+      { verb: "hüpfen", emoji: "🐇", type: "sein", full: "Gestern bin ich auf einem Bein gehüpft.", hint: "Hüpfen ist hüpfende Fortbewegung ➔ SEIN!" },
+      { verb: "wandern", emoji: "🥾", type: "sein", full: "Gestern bin ich durch den Wald gewandert.", hint: "Wandern ist eine Reise zu Fuß ➔ SEIN!" },
+      { verb: "aufstehen", emoji: "⏰", type: "sein", full: "Gestern bin ich früh aufgestanden.", hint: "Aufstehen ändert deinen Zustand vom Liegen zum Stehen ➔ SEIN!" },
+      { verb: "einschlafen", emoji: "🌙", type: "sein", full: "Gestern bin ich schnell eingeschlafen.", hint: "Einschlafen ist ein Zustandswechsel ➔ SEIN!" },
+
+      { verb: "essen", emoji: "🍦", type: "haben", full: "Gestern habe ich ein Eis gegessen.", hint: "Essen tust du am Tisch ➔ HABEN!" },
+      { verb: "trinken", emoji: "🥛", type: "haben", full: "Gestern habe ich frische Milch getrunken.", hint: "Trinken passiert am selben Ort ➔ HABEN!" },
+      { verb: "malen", emoji: "🎨", type: "haben", full: "Gestern habe ich ein Bild gemalt.", hint: "Beim Malen sitzt du gemütlich ➔ HABEN!" },
+      { verb: "spielen", emoji: "🧩", type: "haben", full: "Gestern habe ich mit Bauklötzen gespielt.", hint: "Spielen am Boden oder Tisch ➔ HABEN!" },
+      { verb: "lesen", emoji: "📖", type: "haben", full: "Gestern habe ich ein Buch gelesen.", hint: "Beim Lesen sitzt du ruhig ➔ HABEN!" },
+      { verb: "schreiben", emoji: "✏️", type: "haben", full: "Gestern habe ich ein Wort geschrieben.", hint: "Schreiben auf Papier ➔ HABEN!" },
+      { verb: "basteln", emoji: "✂️", type: "haben", full: "Gestern habe ich eine Krone gebastelt.", hint: "Basteln am Basteltisch ➔ HABEN!" },
+      { verb: "kochen", emoji: "🍲", type: "haben", full: "Gestern habe ich Suppe gekocht.", hint: "Kochen am Herd ➔ HABEN!" },
+      { verb: "schlafen", emoji: "😴", type: "haben", full: "Gestern habe ich tief geschlafen.", hint: "Beim Schlafen bleibst du brav im Bett ➔ HABEN!" },
+      { verb: "singen", emoji: "🎵", type: "haben", full: "Gestern habe ich ein Lied gesungen.", hint: "Singen tust du mit der Stimme ➔ HABEN!" },
+      { verb: "suchen", emoji: "🔍", type: "haben", full: "Gestern habe ich meine Mütze gesucht.", hint: "Suchen ➔ HABEN!" },
+      { verb: "finden", emoji: "💎", type: "haben", full: "Gestern habe ich eine Muschel gefunden.", hint: "Finden ➔ HABEN!" }
+    ];
+
+    // SATZBAU KICKER DATASET (30 SENTENCES)
+    const KICKER_SENTENCES = [
+      { id: 1, conj: "weil", main: "Ich gehe ins Bett,", correctText: "... weil ich müde bin.", correctVerb: "bin", wrongTexts: ["... weil ich bin müde.", "... weil bin ich müde."], full: "Ich gehe ins Bett, weil ich müde bin." },
+      { id: 2, conj: "weil", main: "Ich ziehe die Stiefel an,", correctText: "... weil es draußen fest regnet.", correctVerb: "regnet", wrongTexts: ["... weil es regnet draußen fest.", "... weil regnet es draußen."], full: "Ich ziehe die Stiefel an, weil es draußen fest regnet." },
+      { id: 3, conj: "weil", main: "Una lacht fröhlich,", correctText: "... weil Papa einen Witz erzählt.", correctVerb: "erzählt", wrongTexts: ["... weil Papa erzählt einen Witz.", "... weil erzählt Papa einen Witz."], full: "Una lacht fröhlich, weil Papa einen Witz erzählt." },
+      { id: 4, conj: "weil", main: "Ich trinke warmen Tee,", correctText: "... weil ich Halsschmerzen habe.", correctVerb: "habe", wrongTexts: ["... weil ich habe Halsschmerzen.", "... weil habe ich Halsschmerzen."], full: "Ich trinke warmen Tee, weil ich Halsschmerzen habe." },
+      { id: 5, conj: "weil", main: "Wir essen ein leckeres Eis,", correctText: "... weil die Sonne heiß scheint.", correctVerb: "scheint", wrongTexts: ["... weil die Sonne scheint heiß.", "... weil scheint die Sonne heiß."], full: "Wir essen ein leckeres Eis, weil die Sonne heiß scheint." },
+      { id: 6, conj: "weil", main: "Ich freue mich riesig,", correctText: "... weil ich heute Geburtstag habe.", correctVerb: "habe", wrongTexts: ["... weil ich habe heute Geburtstag.", "... weil habe ich heute Geburtstag."], full: "Ich freue mich riesig, weil ich heute Geburtstag habe." },
+
+      { id: 7, conj: "dass", main: "Ich weiß ganz genau,", correctText: "... dass zwei plus zwei vier ist.", correctVerb: "ist", wrongTexts: ["... dass zwei plus zwei ist vier.", "... dass ist zwei plus zwei vier."], full: "Ich weiß ganz genau, dass zwei plus zwei vier ist." },
+      { id: 8, conj: "dass", main: "Mama freut sich,", correctText: "... dass Una ihr Zimmer aufräumt.", correctVerb: "aufräumt", wrongTexts: ["... dass Una räumt ihr Zimmer auf.", "... dass aufräumt Una ihr Zimmer."], full: "Mama freut sich, dass Una ihr Zimmer aufräumt." },
+      { id: 9, conj: "dass", main: "Ich hoffe sehr,", correctText: "... dass wir morgen schwimmen gehen.", correctVerb: "gehen", wrongTexts: ["... dass wir gehen morgen schwimmen.", "... dass gehen wir morgen schwimmen."], full: "Ich hoffe sehr, dass wir morgen schwimmen gehen." },
+      { id: 10, conj: "dass", main: "Ich glaube,", correctText: "... dass die Katze großen Hunger hat.", correctVerb: "hat", wrongTexts: ["... dass die Katze hat großen Hunger.", "... dass hat die Katze großen Hunger."], full: "Ich glaube, dass die Katze großen Hunger hat." },
+      { id: 11, conj: "dass", main: "Der Lehrer sagt,", correctText: "... dass alle Kinder leise sein sollen.", correctVerb: "sollen", wrongTexts: ["... dass alle Kinder sollen leise sein.", "... dass sollen alle Kinder leise sein."], full: "Der Lehrer sagt, dass alle Kinder leise sein sollen." },
+      { id: 12, conj: "dass", main: "Es ist schön,", correctText: "... dass du meine Freundin bist.", correctVerb: "bist", wrongTexts: ["... dass du bist meine Freundin.", "... dass bist du meine Freundin."], full: "Es ist schön, dass du meine Freundin bist." },
+
+      { id: 13, conj: "wenn", main: "Ich freue mich immer,", correctText: "... wenn Oma zu Besuch kommt.", correctVerb: "kommt", wrongTexts: ["... wenn Oma kommt zu Besuch.", "... wenn kommt Oma zu Besuch."], full: "Ich freue mich immer, wenn Oma zu Besuch kommt." },
+      { id: 14, conj: "wenn", main: "Wir dürfen spielen,", correctText: "... wenn wir die Hausaufgaben fertigmachen.", correctVerb: "fertigmachen", wrongTexts: ["... wenn wir machen die Hausaufgaben fertig.", "... wenn machen wir die Hausaufgaben fertig."], full: "Wir dürfen spielen, wenn wir die Hausaufgaben fertigmachen." },
+      { id: 15, conj: "wenn", main: "Ich nehme den Schirm mit,", correctText: "... wenn dunkle Wolken am Himmel stehen.", correctVerb: "stehen", wrongTexts: ["... wenn dunkle Wolken stehen am Himmel.", "... wenn stehen dunkle Wolken am Himmel."], full: "Ich nehme den Schirm mit, wenn dunkle Wolken am Himmel stehen." },
+      { id: 16, conj: "wenn", main: "Der Hund bellt laut,", correctText: "... wenn jemand an die Haustür klopft.", correctVerb: "klopft", wrongTexts: ["... wenn jemand klopft an die Haustür.", "... wenn klopft jemand an die Haustür."], full: "Der Hund bellt laut, wenn jemand an die Haustür klopft." },
+      { id: 17, conj: "wenn", main: "Ich ziehe eine Jacke an,", correctText: "... wenn der kalte Wind weht.", correctVerb: "weht", wrongTexts: ["... wenn der kalte Wind weht fest.", "... wenn weht der kalte Wind."], full: "Ich ziehe eine Jacke an, wenn der kalte Wind weht." },
+      { id: 18, conj: "wenn", main: "Du darfst Kuchen essen,", correctText: "... wenn du dir die Hände wäschst.", correctVerb: "wäschst", wrongTexts: ["... wenn du wäschst dir die Hände.", "... wenn wäschst du dir die Hände."], full: "Du darfst Kuchen essen, wenn du dir die Hände wäschst." },
+
+      { id: 19, conj: "bis", main: "Wir bleiben an der Ampel stehen,", correctText: "... bis das Männchen grün wird.", correctVerb: "wird", wrongTexts: ["... bis das Männchen wird grün.", "... bis wird das Männchen grün."], full: "Wir bleiben an der Ampel stehen, bis das Männchen grün wird." },
+      { id: 20, conj: "bis", main: "Ich rühre den Kakao um,", correctText: "... bis sich das Pulver auflöst.", correctVerb: "auflöst", wrongTexts: ["... bis löst sich das Pulver auf.", "... bis sich das Pulver löst auf."], full: "Ich rühre den Kakao um, bis sich das Pulver auflöst." },
+      { id: 21, conj: "bis", main: "Wir warten im Klassenzimmer,", correctText: "... bis die Schulglocke laut klingelt.", correctVerb: "klingelt", wrongTexts: ["... bis die Schulglocke klingelt laut.", "... bis klingelt die Schulglocke laut."], full: "Wir warten im Klassenzimmer, bis die Schulglocke laut klingelt." },
+      { id: 22, conj: "bis", main: "Mama liest mir eine Geschichte vor,", correctText: "... bis ich gemütlich einschlafe.", correctVerb: "einschlafe", wrongTexts: ["... bis ich schlafe gemütlich ein.", "... bis schlafe ich gemütlich ein."], full: "Mama liest mir eine Geschichte vor, bis ich gemütlich einschlafe." },
+      { id: 23, conj: "bis", main: "Die Kinder rennen um die Wette,", correctText: "... bis sie an der Schaukel ankommen.", correctVerb: "ankommen", wrongTexts: ["... bis sie kommen an der Schaukel an.", "... bis kommen sie an der Schaukel an."], full: "Die Kinder rennen um die Wette, bis sie an der Schaukel ankommen." },
+      { id: 24, conj: "bis", main: "Lass den Kuchen im Backofen,", correctText: "... bis er schön goldbraun ist.", correctVerb: "ist", wrongTexts: ["... bis er ist schön goldbraun.", "... bis ist er schön goldbraun."], full: "Lass den Kuchen im Backofen, bis er schön goldbraun ist." },
+
+      { id: 25, conj: "ob", main: "Papa fragt mich,", correctText: "... ob ich heute Fahrrad fahre.", correctVerb: "fahre", wrongTexts: ["... ob ich fahre heute Fahrrad.", "... ob fahre ich heute Fahrrad."], full: "Papa fragt mich, ob ich heute Fahrrad fahre." },
+      { id: 26, conj: "ob", main: "Ich schaue nach,", correctText: "... ob noch Milch im Kühlschrank steht.", correctVerb: "steht", wrongTexts: ["... ob steht noch Milch im Kühlschrank.", "... ob noch Milch steht im Kühlschrank."], full: "Ich schaue nach, ob noch Milch im Kühlschrank steht." },
+      { id: 27, conj: "ob", main: "Ich weiß nicht,", correctText: "... ob Una heute Zeit hat.", correctVerb: "hat", wrongTexts: ["... ob Una hat heute Zeit.", "... ob hat Una heute Zeit."], full: "Ich weiß nicht, ob Una heute Zeit hat." },
+      { id: 28, conj: "ob", main: "Die Lehrerin will wissen,", correctText: "... ob alle Kinder die Aufgabe verstehen.", correctVerb: "verstehen", wrongTexts: ["... ob alle Kinder verstehen die Aufgabe.", "... ob verstehen alle Kinder die Aufgabe."], full: "Die Lehrerin will wissen, ob alle Kinder die Aufgabe verstehen." },
+      { id: 29, conj: "ob", main: "Ich bin mir nicht sicher,", correctText: "... ob das Paket heute ankommt.", correctVerb: "ankommt", wrongTexts: ["... ob das Paket kommt heute an.", "... ob kommt das Paket heute an."], full: "Ich bin mir nicht sicher, ob das Paket heute ankommt." },
+      { id: 30, conj: "ob", main: "Das Eichhörnchen prüft,", correctText: "... ob die Nuss lecker schmeckt.", correctVerb: "schmeckt", wrongTexts: ["... ob die Nuss schmeckt lecker.", "... ob schmeckt die Nuss lecker."], full: "Das Eichhörnchen prüft, ob die Nuss lecker schmeckt." }
+    ];
+
+    // =========================================================================
+    // 2. AUDIO & SPEECH ENGINE
+    // =========================================================================
+    const AudioEngine = {
+      ctx: null,
+      enabled: true,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+      },
+      playGoal() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(392, now);
+        osc.frequency.setValueAtTime(523.25, now + 0.1);
+        osc.frequency.setValueAtTime(659.25, now + 0.2);
+        osc.frequency.setValueAtTime(783.99, now + 0.3);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+        osc.start(now);
+        osc.stop(now + 0.55);
+      },
+      playMistake() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(240, now);
+        osc.frequency.exponentialRampToValueAtTime(160, now + 0.25);
+        gain.gain.setValueAtTime(0.16, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      }
+    };
+
+    function speakGerman(text) {
+      if (!AudioEngine.enabled) return;
+      if (!('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.resume();
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'de-DE';
+        u.rate = 0.86;
+        u.pitch = 1.05;
+        const voices = window.speechSynthesis.getVoices();
+        const deVoice = voices.find(v => v.lang && (v.lang.startsWith('de') || v.lang.includes('DE')));
+        if (deVoice) u.voice = deVoice;
+        window.speechSynthesis.speak(u);
+      } catch (e) {
+        console.warn("Speech error:", e);
+      }
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+      window.speechSynthesis.getVoices();
+    }
+
+    function toggleAudio() {
+      AudioEngine.enabled = !AudioEngine.enabled;
+      document.getElementById('audio-icon').innerText = AudioEngine.enabled ? "🔊" : "🔇";
+      if (!AudioEngine.enabled && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#f59e0b', '#ec4899', '#3b82f6', '#10b981', '#8b5cf6'];
+      for (let i = 0; i < 28; i++) {
+        particles.push({
+          x: canvas.width / 2 + (Math.random() - 0.5) * 120,
+          y: canvas.height * 0.45,
+          vx: (Math.random() - 0.5) * 9,
+          vy: Math.random() * -7 - 2,
+          size: Math.random() * 6 + 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          dr: (Math.random() - 0.5) * 10,
+          life: 1
+        });
+      }
+
+      let start = null;
+      function step(timestamp) {
+        if (!start) start = timestamp;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.3;
+          p.rotation += p.dr;
+          p.life -= 0.025;
+          if (p.life > 0) {
+            alive = true;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, p.life);
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            ctx.restore();
+          }
+        });
+        if (alive) requestAnimationFrame(step);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // =========================================================================
+    // 3. NAVIGATION (SWITCH BETWEEN ACTIVITIES)
+    // =========================================================================
+    function showSection(sec) {
+      const sections = ['home', 'verben', 'habensein', 'kicker', 'lexikon'];
+      sections.forEach(s => {
+        const el = document.getElementById(`sec-${s}`);
+        if (el) el.classList.add('hidden');
+      });
+
+      const activeEl = document.getElementById(`sec-${sec}`);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      // Update Top Nav button styling
+      const navIds = ['home', 'verben', 'habensein', 'kicker'];
+      navIds.forEach(n => {
+        const btn = document.getElementById(`nav-btn-${n}`);
+        if (!btn) return;
+        if (n === sec || (sec === 'lexikon' && n === 'verben')) {
+          btn.className = "px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm bg-amber-500 text-white shadow-xs";
+        } else {
+          btn.className = "px-2.5 sm:px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 text-slate-700";
+        }
+      });
+
+      // Init specific view logic
+      if (sec === 'verben') loadVerb(currentVerbIndex);
+      if (sec === 'habensein') loadSortCard(currentSortIndex);
+      if (sec === 'kicker') loadKickerQuestion(currentKickerIndex);
+      if (sec === 'lexikon') populateLexikon();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // =========================================================================
+    // 4. ACTIVITY 1 LOGIC: 100 VERBEN (HEUTE & GESTERN)
+    // =========================================================================
+    let verbsPool = [...VERBS_DATA];
+    let currentVerbIndex = 0;
+    let currentVerb = null;
+    let verbStars = 0;
+    let verbStreak = 0;
+    let hasAnsweredVerb = false;
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    function loadVerb(idx) {
+      if (idx >= verbsPool.length) {
+        idx = 0;
+        shuffle(verbsPool);
+      }
+      currentVerbIndex = idx;
+      currentVerb = verbsPool[currentVerbIndex];
+      hasAnsweredVerb = false;
+
+      const catNames = { all: "Verb", essen: "🍎 Essen", schule: "✏️ Schule", sport: "🏃‍♀️ Sport", alltag: "🏠 Alltag", gefuehle: "💬 Gefühle" };
+      document.getElementById('verb-badge').innerText = catNames[currentVerb.cat] || "Verb";
+      document.getElementById('progress-indicator').innerText = `Verb ${currentVerbIndex + 1} von ${verbsPool.length}`;
+      document.getElementById('sentence-today').innerText = currentVerb.today;
+      document.getElementById('infinitive-label').innerText = currentVerb.inf;
+
+      const yEl = document.getElementById('sentence-yesterday');
+      yEl.innerHTML = `${currentVerb.yPre} <span id="verb-blank" class="inline-block bg-white border-2 border-dashed border-purple-400 text-purple-700 px-3 py-0.5 rounded-xl text-lg font-black shadow-xs">???</span>${currentVerb.yPost}`;
+
+      const fb = document.getElementById('verb-feedback');
+      fb.className = "hidden rounded-2xl p-4 transition-all";
+
+      const grid = document.getElementById('verb-options-grid');
+      grid.innerHTML = '';
+
+      const shuffledOptions = [...currentVerb.options].sort(() => Math.random() - 0.5);
+      shuffledOptions.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = "verb-opt-btn bg-slate-50 hover:bg-amber-100 hover:border-amber-400 border-2 border-slate-200 text-slate-900 font-extrabold text-base sm:text-lg py-3 px-4 rounded-2xl transition shadow-xs flex items-center justify-between";
+        btn.innerHTML = `<span>${opt}</span><span class="text-xs text-slate-400 bg-white px-2 py-0.5 rounded border border-slate-200 font-bold">Klick</span>`;
+        btn.onclick = () => selectVerbOption(btn, opt);
+        grid.appendChild(btn);
+      });
+    }
+
+    function selectVerbOption(btn, chosen) {
+      if (hasAnsweredVerb) return;
+      const isCorrect = chosen === currentVerb.correct;
+      const blank = document.getElementById('verb-blank');
+      const fb = document.getElementById('verb-feedback');
+      const fbTitle = document.getElementById('verb-fb-title');
+      const fbDesc = document.getElementById('verb-fb-desc');
+      const tipRule = document.getElementById('verb-tip-rule');
+
+      if (isCorrect) {
+        hasAnsweredVerb = true;
+        AudioEngine.playGoal();
+        triggerConfetti();
+
+        btn.className = "bg-emerald-500 border-2 border-emerald-600 text-white font-extrabold text-base sm:text-lg py-3 px-4 rounded-2xl shadow-md flex items-center justify-between anim-bounce";
+        btn.innerHTML = `<span>${chosen}</span> <span>✅ Richtig!</span>`;
+
+        document.querySelectorAll('.verb-opt-btn').forEach(b => {
+          if (b !== btn) b.classList.add('opacity-40', 'pointer-events-none');
+        });
+
+        blank.innerText = chosen;
+        blank.className = "inline-block bg-emerald-100 border-2 border-emerald-500 text-emerald-900 px-3 py-0.5 rounded-xl text-lg font-black anim-wiggle";
+
+        verbStars += 1;
+        verbStreak += 1;
+        document.getElementById('star-count').innerText = verbStars;
+        document.getElementById('streak-count').innerText = verbStreak;
+
+        fbTitle.innerText = "Spitze, Una! 🌟";
+        fbDesc.innerText = `Der ganze Satz: „${currentVerb.full}“`;
+        tipRule.innerText = currentVerb.tip;
+
+        fb.className = "rounded-2xl p-4 transition-all bg-emerald-50 border-2 border-emerald-300 text-emerald-950 block";
+
+        speakGerman(currentVerb.full);
+
+      } else {
+        AudioEngine.playMistake();
+        verbStreak = 0;
+        document.getElementById('streak-count').innerText = verbStreak;
+
+        btn.className = "bg-rose-100 border-2 border-rose-300 text-rose-800 line-through opacity-70 font-bold text-base sm:text-lg py-3 px-4 rounded-2xl pointer-events-none flex items-center justify-between anim-shake";
+        btn.innerHTML = `<span>${chosen}</span> <span>❌ Fast</span>`;
+
+        fbTitle.innerText = "Fast geschafft!";
+        fbDesc.innerText = `„${chosen}“ passt noch nicht ganz. Versuch es noch einmal!`;
+        tipRule.innerText = currentVerb.tip;
+
+        fb.className = "rounded-2xl p-4 transition-all bg-rose-50 border-2 border-rose-200 text-rose-950 block";
+
+        speakGerman(`Fast! Bei ${currentVerb.inf} heißt es ${currentVerb.correct}.`);
+      }
+    }
+
+    function nextVerb() {
+      loadVerb(currentVerbIndex + 1);
+    }
+
+    function showVerbHint() {
+      const fb = document.getElementById('verb-feedback');
+      document.getElementById('verb-fb-title').innerText = "💡 Geheimer Tipp";
+      document.getElementById('verb-fb-desc').innerText = currentVerb.tip;
+      document.getElementById('verb-tip-rule').innerText = `Grundform: ${currentVerb.inf} (${currentVerb.aux})`;
+      fb.className = "rounded-2xl p-4 transition-all bg-amber-50 border border-amber-200 text-amber-950 block";
+    }
+
+    function filterVerbsCategory(cat) {
+      if (cat === 'all') verbsPool = [...VERBS_DATA];
+      else if (cat === 'irregular') verbsPool = VERBS_DATA.filter(v => !v.isReg);
+      else verbsPool = VERBS_DATA.filter(v => v.cat === cat);
+      shuffle(verbsPool);
+      loadVerb(0);
+    }
+
+    // =========================================================================
+    // 5. ACTIVITY 2 LOGIC: HABEN ODER SEIN
+    // =========================================================================
+    let sortPool = [...SORT_VERBS];
+    let currentSortIndex = 0;
+    let sortStars = 0;
+    let isSortLocked = false;
+
+    function loadSortCard(idx) {
+      if (idx >= sortPool.length) {
+        idx = 0;
+        shuffle(sortPool);
+      }
+      currentSortIndex = idx;
+      isSortLocked = false;
+      const item = sortPool[currentSortIndex];
+
+      document.getElementById('sort-emoji').innerText = item.emoji;
+      document.getElementById('sort-verb').innerText = item.verb;
+      document.getElementById('sort-sentence').innerText = `Heute: „Ich ${item.verb}e gerne.“`;
+      document.getElementById('sort-progress').innerText = `Wort ${currentSortIndex + 1} von ${sortPool.length}`;
+
+      const fb = document.getElementById('sort-fb');
+      fb.className = "hidden rounded-2xl p-3.5 max-w-md mx-auto transition-all";
+    }
+
+    function answerSort(chosenType) {
+      if (isSortLocked) return;
+      const item = sortPool[currentSortIndex];
+      const isCorrect = chosenType === item.type;
+      const fb = document.getElementById('sort-fb');
+      const fbTitle = document.getElementById('sort-fb-title');
+      const fbDesc = document.getElementById('sort-fb-desc');
+      const fbHint = document.getElementById('sort-fb-hint');
+
+      if (isCorrect) {
+        isSortLocked = true;
+        AudioEngine.playGoal();
+        triggerConfetti();
+
+        sortStars += 1;
+        document.getElementById('sort-stars').innerText = sortStars;
+
+        fbTitle.innerText = chosenType === 'sein' ? "🚀 Richtig! Bewegung!" : "🛋️ Richtig! Am selben Ort!";
+        fbDesc.innerText = `„${item.full}“`;
+        fbHint.innerText = item.hint;
+
+        fb.className = "rounded-2xl p-3.5 max-w-md mx-auto transition-all bg-emerald-50 border-2 border-emerald-300 text-emerald-950 block";
+
+        speakGerman(item.full);
+
+        setTimeout(() => loadSortCard(currentSortIndex + 1), 1600);
+
+      } else {
+        AudioEngine.playMistake();
+        fbTitle.innerText = "Kurz nachdenken! 🤔";
+        fbDesc.innerText = `Bei „${item.verb}“ nehmen wir nicht „${chosenType === 'sein' ? 'sein' : 'haben'}“!`;
+        fbHint.innerText = item.hint;
+
+        fb.className = "rounded-2xl p-3.5 max-w-md mx-auto transition-all bg-rose-50 border-2 border-rose-300 text-rose-950 block";
+
+        speakGerman(item.hint);
+      }
+    }
+
+    // =========================================================================
+    // 6. ACTIVITY 3 LOGIC: SATZBAU KICKER (WEIL, DASS, WENN, BIS, OB)
+    // =========================================================================
+    let kickerPool = [...KICKER_SENTENCES];
+    let currentKickerIndex = 0;
+    let kickerStars = 0;
+    let kickerStreak = 0;
+    let hasAnsweredKicker = false;
+
+    function loadKickerQuestion(idx) {
+      if (idx >= kickerPool.length) {
+        idx = 0;
+        shuffle(kickerPool);
+      }
+      currentKickerIndex = idx;
+      hasAnsweredKicker = false;
+      const q = kickerPool[currentKickerIndex];
+
+      document.getElementById('kicker-badge').innerText = `Kicker: ${q.conj}`;
+      document.getElementById('kicker-progress').innerText = `Frage ${currentKickerIndex + 1} von ${kickerPool.length}`;
+      document.getElementById('kicker-prompt').innerText = `„${q.main} ...“`;
+
+      const fb = document.getElementById('kicker-fb');
+      fb.className = "hidden rounded-xl p-3.5 transition-all";
+
+      const allChoices = [
+        { text: q.correctText, isCorrect: true },
+        ...q.wrongTexts.map(wt => ({ text: wt, isCorrect: false }))
+      ].sort(() => Math.random() - 0.5);
+
+      const container = document.getElementById('kicker-options-container');
+      container.innerHTML = '';
+
+      allChoices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = "kicker-btn group w-full bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border-2 border-slate-200 text-slate-900 font-extrabold text-sm sm:text-base py-3 px-3.5 rounded-xl transition shadow-xs flex items-center justify-between text-left active:scale-[0.99]";
+        btn.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-white border border-slate-300 flex items-center justify-center text-[11px] font-bold text-slate-500 group-hover:border-emerald-500 group-hover:text-emerald-700">👉</span>
+            <span>${choice.text}</span>
+          </div>
+          <span class="text-[10px] bg-white text-slate-400 group-hover:text-emerald-700 font-bold px-2 py-0.5 rounded border border-slate-200">Klick</span>
+        `;
+        btn.onclick = () => selectKickerChoice(btn, choice);
+        container.appendChild(btn);
+      });
+    }
+
+    function selectKickerChoice(btn, choice) {
+      if (hasAnsweredKicker) return;
+      const q = kickerPool[currentKickerIndex];
+      const fb = document.getElementById('kicker-fb');
+      const fbTitle = document.getElementById('kicker-fb-title');
+      const fbSent = document.getElementById('kicker-fb-sentence');
+      const fbRule = document.getElementById('kicker-fb-rule');
+      const audioActions = document.getElementById('kicker-audio-actions');
+
+      if (choice.isCorrect) {
+        hasAnsweredKicker = true;
+        AudioEngine.playGoal();
+        triggerConfetti();
+
+        btn.className = "w-full bg-emerald-500 border-2 border-emerald-600 text-white font-extrabold text-sm sm:text-base py-3 px-3.5 rounded-xl shadow-md flex items-center justify-between anim-bounce";
+        btn.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            <span class="text-base">✅</span>
+            <span>${choice.text}</span>
+          </div>
+          <span class="text-[10px] bg-emerald-600 text-white font-bold px-2 py-0.5 rounded">Richtig!</span>
+        `;
+
+        document.querySelectorAll('.kicker-btn').forEach(b => {
+          if (b !== btn) b.classList.add('opacity-40', 'pointer-events-none');
+        });
+
+        kickerStars += 1;
+        kickerStreak += 1;
+
+        fbTitle.innerText = "⚽ Tooor! Genau richtig!";
+        fbSent.innerText = `„${q.full}“`;
+        fbRule.innerText = `Super, Una! Bei „${q.conj}“ steht das Verb „${q.correctVerb}“ ganz am Ende des Satzes!`;
+
+        audioActions.innerHTML = `
+          <button onclick="speakGerman('${q.full.replace(/'/g, "\\'")}')" class="bg-white hover:bg-emerald-100 text-emerald-950 border border-emerald-300 px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1 shadow-xs transition">
+            <span>🔊</span> Satz nochmal hören
+          </button>
+        `;
+
+        fb.className = "rounded-xl p-3.5 transition-all bg-emerald-50 border-2 border-emerald-300 text-emerald-950 block";
+
+        speakGerman(q.full);
+
+      } else {
+        // WRONG CHOICE
+        AudioEngine.playMistake();
+        kickerStreak = 0;
+
+        btn.className = "w-full bg-rose-100 border-2 border-rose-300 text-rose-800 line-through opacity-70 font-bold text-sm sm:text-base py-3 px-3.5 rounded-xl pointer-events-none flex items-center justify-between anim-shake";
+        btn.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            <span class="text-base">❌</span>
+            <span>${choice.text}</span>
+          </div>
+          <span class="text-[10px] bg-rose-200 text-rose-900 font-bold px-2 py-0.5 rounded">Falsch</span>
+        `;
+
+        const germanReminder = `Denk daran, Una: Wenn du ${q.conj} benutzt, steht das Verb ganz am Ende des Satzes!`;
+
+        fbTitle.innerText = "Hör gut zu, Una! 🎧";
+        fbSent.innerText = `„${germanReminder}“`;
+        fbRule.innerText = `Bei dem Wort „${q.conj}“ darf das Verb „${q.correctVerb}“ nicht in die Mitte, sondern muss ganz ans Ende!`;
+
+        audioActions.innerHTML = `
+          <button onclick="speakGerman('${germanReminder.replace(/'/g, "\\'")}')" class="bg-white hover:bg-rose-100 text-rose-950 border-2 border-rose-300 px-3 py-1 rounded-lg text-xs font-black flex items-center gap-1 shadow-xs transition">
+            <span>🔊</span> Erklärung nochmal hören
+          </button>
+        `;
+
+        fb.className = "rounded-xl p-3.5 transition-all bg-rose-50 border-2 border-rose-300 text-rose-950 block";
+
+        // AUTOMATIC INSTANT GERMAN SPOKEN EXPLANATION
+        speakGerman(germanReminder);
+      }
+    }
+
+    function nextKickerQuestion() {
+      loadKickerQuestion(currentKickerIndex + 1);
+    }
+
+    function showKickerHint() {
+      const q = kickerPool[currentKickerIndex];
+      const hint = `Denk daran, Una: Bei ${q.conj} steht das Verb ${q.correctVerb} ganz am Ende!`;
+      const fb = document.getElementById('kicker-fb');
+      document.getElementById('kicker-fb-title').innerText = "💡 Kicker-Tipp";
+      document.getElementById('kicker-fb-sentence').innerText = `Das Zauberwort ist: „${q.conj}“`;
+      document.getElementById('kicker-fb-rule').innerText = `Suche die Option, bei der das Verb „${q.correctVerb}“ ganz am Ende steht!`;
+      
+      const audioActions = document.getElementById('kicker-audio-actions');
+      audioActions.innerHTML = `
+        <button onclick="speakGerman('${hint.replace(/'/g, "\\'")}')" class="bg-white hover:bg-amber-100 text-amber-950 border border-amber-300 px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1 shadow-xs transition">
+          <span>🔊</span> Tipp anhören
+        </button>
+      `;
+
+      fb.className = "rounded-xl p-3.5 transition-all bg-amber-50 border border-amber-200 text-amber-950 block";
+      speakGerman(hint);
+    }
+
+    // =========================================================================
+    // 7. ACTIVITY 4 LOGIC: 100 VERBEN LEXIKON
+    // =========================================================================
+    function populateLexikon(verbs = VERBS_DATA) {
+      const container = document.getElementById('lexikon-container');
+      const countEl = document.getElementById('lexikon-count');
+      countEl.innerText = `${verbs.length} von 100 Verben`;
+      container.innerHTML = '';
+
+      verbs.forEach(v => {
+        const item = document.createElement('div');
+        item.className = "p-3 hover:bg-slate-50 transition flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs";
+        item.innerHTML = `
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-slate-400">#${v.id}</span>
+              <strong class="text-slate-900 font-extrabold text-sm sm:text-base">${v.inf}</strong>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${v.isReg ? 'bg-emerald-100 text-emerald-800' : 'bg-purple-100 text-purple-800'}">
+                ${v.isReg ? 'Regelmäßig' : 'Zauberverb'}
+              </span>
+              <span class="text-slate-500 font-medium">(${v.aux})</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mt-1.5">
+              <div class="bg-blue-50/70 p-1.5 rounded-lg border border-blue-100 text-blue-900">
+                <span class="text-[9px] font-extrabold uppercase text-blue-600 block">Heute:</span>
+                ${v.today}
+              </div>
+              <div class="bg-purple-50/70 p-1.5 rounded-lg border border-purple-100 text-purple-900">
+                <span class="text-[9px] font-extrabold uppercase text-purple-600 block">Gestern:</span>
+                ${v.full}
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center justify-end">
+            <button onclick="speakGerman('${v.full.replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg font-bold flex items-center gap-1 border border-slate-200 shadow-xs" title="Gestern anhören">
+              <span>🔊</span>
+            </button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function searchLexikon(q) {
+      const query = q.toLowerCase().trim();
+      const filtered = VERBS_DATA.filter(v => 
+        v.inf.toLowerCase().includes(query) || 
+        v.today.toLowerCase().includes(query) || 
+        v.full.toLowerCase().includes(query) ||
+        v.correct.toLowerCase().includes(query)
+      );
+      populateLexikon(filtered);
+    }
+
+    function filterLexikon(cat) {
+      let filtered = [...VERBS_DATA];
+      if (cat === 'irregular') filtered = filtered.filter(v => !v.isReg);
+      else if (cat !== 'all') filtered = filtered.filter(v => v.cat === cat);
+      populateLexikon(filtered);
+    }
+
+    // =========================================================================
+    // 8. INITIALIZE ON LOAD
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      shuffle(verbsPool);
+      shuffle(sortPool);
+      shuffle(kickerPool);
+      loadVerb(0);
+      loadSortCard(0);
+      loadKickerQuestion(0);
+      populateLexikon();
+    });
+  </script>
+</body>
+</html>
